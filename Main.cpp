@@ -40,7 +40,7 @@ int main()
 	gladLoadGL();
 
 
-	LoadShaders("vertex.shader", "fragment.shader");
+	LoadShaders("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 
 	GLfloat vertices[] = {
@@ -55,18 +55,18 @@ int main()
 		1, 2, 3
 	};
 
-	GLuint VertexArrayID, VertexBufferID, ElementufferID;
+	GLuint VertexArrayID, VertexBufferID, ElementBufferID;
 
 	glGenVertexArrays(1, &VertexArrayID);
 	glGenBuffers(1, &VertexBufferID);
-	glGenBuffers(1, &ElementufferID);
+	glGenBuffers(1, &ElementBufferID);
 
 	glBindVertexArray(VertexArrayID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indecies), indecies, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(
@@ -82,8 +82,6 @@ int main()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glViewport(0, 0, 800, 600);
 
