@@ -1,7 +1,10 @@
 #version 330 core
 
-layout(location = 0) out vec3 color;
+layout(location = 0) out vec4 color;
+
+uniform vec4 u_Color;
+
 void main()
 {
-	color = vec3(1.0, 0.5, 0.2);
+	color = u_Color;
 }

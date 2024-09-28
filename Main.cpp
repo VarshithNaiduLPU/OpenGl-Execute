@@ -9,7 +9,7 @@
 #include "Classes/VertexBuffer.h"
 #include "Classes/ElementBuffer.h"
 
-void LoadShaders(const std::string vertexFilePath, const std::string fragmentFilePath);
+GLuint LoadShaders(const std::string vertexFilePath, const std::string fragmentFilePath);
 void ProcessInput(GLFWwindow* window);
 
 const int SCREEN_WIDTH = 800;
@@ -41,6 +41,8 @@ int main()
 	}
 	std::cout << "Created a Window." << std::endl;
 	glfwMakeContextCurrent(window);
+
+	glfwSwapInterval(1);
 
 	gladLoadGL();
 
@@ -93,10 +95,16 @@ int main()
 
 		ElementBuffer eb(indecies, NoOfIndecies);
 
-		LoadShaders("Shaders/vertex.shader", "Shaders/fragment.shader");
+		GLuint shader = LoadShaders("Shaders/vertex.shader", "Shaders/fragment.shader");
+
+		int location = glGetUniformLocation(shader, "u_Color");
+		glUniform4f(location, 1.0f, 0.5f, 0.2f, 1.0f);
 
 
 		glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		float r = 1.0f;
+		float increment = 0.05f;
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -104,6 +112,19 @@ int main()
 
 			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			glUniform4f(location, r, 0.5f, 0.2f, 1.0f);
+
+			if (r > 1.0f)
+			{
+				increment = -0.05f;
+			}
+			else if (r < 0.0f)
+			{
+				increment = 0.05f;
+			}
+
+			r += increment;
 
 			//Drawing Triangles
 			va.Bind();
@@ -118,7 +139,7 @@ int main()
 	return EXIT_SUCCESS;
 }
 
-void LoadShaders(const std::string vertexFilePath, const std::string fragmentFilePath)
+GLuint LoadShaders(const std::string vertexFilePath, const std::string fragmentFilePath)
 {
 	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -171,6 +192,8 @@ void LoadShaders(const std::string vertexFilePath, const std::string fragmentFil
 
 	glDeleteShader(vertexShaderID);
 	glDeleteShader(fragmentShaderID);
+
+	return shaderProgram;
 }
 
 void ProcessInput(GLFWwindow* window)
